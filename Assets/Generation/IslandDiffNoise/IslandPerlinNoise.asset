@@ -9,14 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5418f1b0a9704340acb343663bc018e2, type: 3}
-  m_Name: CurveGraph
+  m_Script: {fileID: 11500000, guid: 8b259c7117074970b4fa275a17c43790, type: 3}
+  m_Name: IslandPerlinNoise
   m_EditorClassIdentifier: 
-  name: 
   batchSize: 32
-  dependencies:
-  - {fileID: 11400000, guid: ab56229da3d40b74b8502dc9ea4900d9, type: 2}
-  strength: 5
-  cutoff: 0.29
-  amplitude: 1
-  yOffset: 0
+  dependencies: []
+  octaveSettingsArray:
+  - amplitude: 1
+    frequency: 1
+  noiseScale: 200
+  additionalOffset: {x: 0, y: 0}
