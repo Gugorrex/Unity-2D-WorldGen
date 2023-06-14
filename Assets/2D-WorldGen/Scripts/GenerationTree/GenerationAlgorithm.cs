@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using _2D_WorldGen.Scripts.GenerationTree.Core;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
@@ -9,7 +8,7 @@ namespace _2D_WorldGen.Scripts.GenerationTree
     public abstract class GenerationAlgorithm : ScriptableObject
     {
         [Header("General Settings")]
-        public int batchSize;
+        public int batchSize = 32;
         public GenerationAlgorithm[] dependencies;
 
         private NativeArray<float> _results = new(1, Allocator.Persistent);
