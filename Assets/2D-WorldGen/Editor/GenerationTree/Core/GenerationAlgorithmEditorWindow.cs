@@ -1,7 +1,8 @@
-﻿using UnityEditor;
+﻿using _2D_WorldGen.Scripts.GenerationTree.Core;
+using UnityEditor;
 using UnityEngine;
 
-namespace _2D_WorldGen.Scripts.GenerationTree.Core
+namespace _2D_WorldGen.Editor.GenerationTree.Core
 {
     public class GenerationAlgorithmEditorWindow : EditorWindow
     {
