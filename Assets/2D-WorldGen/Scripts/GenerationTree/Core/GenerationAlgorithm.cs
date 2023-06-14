@@ -7,8 +7,7 @@ namespace _2D_WorldGen.Scripts.GenerationTree.Core
 {
     public abstract class GenerationAlgorithm : ScriptableObject
     {
-        [Header("General Settings")] 
-        public string name = "hi";
+        [Header("General Settings")]
         public int batchSize;
         public GenerationAlgorithm[] dependencies;
 
