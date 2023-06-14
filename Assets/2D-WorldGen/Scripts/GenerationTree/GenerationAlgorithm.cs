@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using _2D_WorldGen.Scripts.GenerationTree.Core;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 
-namespace _2D_WorldGen.Scripts.GenerationTree.Core
+namespace _2D_WorldGen.Scripts.GenerationTree
 {
     public abstract class GenerationAlgorithm : ScriptableObject
     {

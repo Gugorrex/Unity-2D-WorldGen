@@ -1,7 +1,7 @@
 ﻿using System;
 using Unity.Mathematics;
 
-namespace _2D_WorldGen.Scripts.GenerationTree.Core
+namespace _2D_WorldGen.Scripts.GenerationTree
 {
     public struct GenerationCycleData
     {

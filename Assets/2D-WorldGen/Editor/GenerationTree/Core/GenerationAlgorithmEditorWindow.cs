@@ -1,4 +1,5 @@
-﻿using _2D_WorldGen.Scripts.GenerationTree.Core;
+﻿using _2D_WorldGen.Scripts.GenerationTree;
+using _2D_WorldGen.Scripts.GenerationTree.Core;
 using UnityEditor;
 using UnityEngine;
 

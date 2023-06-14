@@ -1,4 +1,5 @@
-﻿using _2D_WorldGen.Scripts.GenerationTree.Core;
+﻿using _2D_WorldGen.Scripts.GenerationTree;
+using _2D_WorldGen.Scripts.GenerationTree.Core;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -8,13 +9,16 @@ namespace _2D_WorldGen.Scripts
     {
         public CurveGraphAlg curveGraphAlg;
 
-        private void Start()
+        private void Update()
         {
-            var cycleData = new GenerationCycleData(0, int2.zero, 2);
-            curveGraphAlg.ScheduleAll(cycleData).Complete();
-            foreach (var value in curveGraphAlg.GetResults())
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                Debug.Log(value);
+                var cycleData = new GenerationCycleData(0, int2.zero, 2);
+                curveGraphAlg.ScheduleAll(cycleData).Complete();
+                foreach (var value in curveGraphAlg.GetResults())
+                {
+                    Debug.Log(value);
+                }
             }
         }
     }
