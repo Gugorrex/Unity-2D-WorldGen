@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58b9e9736c154868a2543ea3d36e9fd3, type: 3}
+  m_Name: DemoTilemapConfig
+  m_EditorClassIdentifier: 
+  tileSize: 16
+  tilemapConfigurations:
+  - stringID: Ground
+    isObstacle: 0
+    tileConfigurations:
+    - stringID: None
+      tile: {fileID: 0}
+      tileCost: 0
+      height: 0
+    - stringID: Beach
+      tile: {fileID: 11400000, guid: b958bcf9bf5f99f42a183f463051d02a, type: 2}
+      tileCost: 0
+      height: 0
+    - stringID: Low Lands
+      tile: {fileID: 11400000, guid: a718b402c639d8c488eb47b3416d0e55, type: 2}
+      tileCost: 0
+      height: 0
+    - stringID: High Lands
+      tile: {fileID: 11400000, guid: 6609ec6e8644d6843bb99881b2b9904a, type: 2}
+      tileCost: 0
+      height: 0
+    - stringID: Dirt
+      tile: {fileID: 11400000, guid: 827ad13c4ce72d84781488b4de6e173d, type: 2}
+      tileCost: 0
+      height: 0
+    - stringID: Start
+      tile: {fileID: 11400000, guid: bcfd6cdec415ff343bef18455b5a8e59, type: 2}
+      tileCost: 0
+      height: 0
+    - stringID: End
+      tile: {fileID: 11400000, guid: dde3ea61f38bbf4418e36d1682c51c4e, type: 2}
+      tileCost: 0
+      height: 0
+  - stringID: GroundOverlay
+    isObstacle: 0
+    tileConfigurations: []
+  - stringID: Obstacle
+    isObstacle: 1
+    tileConfigurations:
+    - stringID: Deep Ocean
+      tile: {fileID: 11400000, guid: c6e2e0bb661161348ab798b4cd5f7174, type: 2}
+      tileCost: 0
+      height: 0
+    - stringID: Shallow Ocean
+      tile: {fileID: 11400000, guid: 7dc7421ce98857640b85d1560b62e475, type: 2}
+      tileCost: 0
+      height: 0
+    - stringID: None
+      tile: {fileID: 0}
+      tileCost: 0
+      height: 0
+    - stringID: Mountain
+      tile: {fileID: 11400000, guid: 53530cbda2e271f43997f41c1b2105fd, type: 2}
+      tileCost: 0
+      height: 0
+    - stringID: Snow
+      tile: {fileID: 11400000, guid: 5f907727b08ef804080f7c7c5d629a02, type: 2}
+      tileCost: 0
+      height: 0
