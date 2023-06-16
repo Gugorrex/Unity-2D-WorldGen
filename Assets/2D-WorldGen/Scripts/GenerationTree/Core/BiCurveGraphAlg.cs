@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace _2D_WorldGen.Scripts.GenerationTree.Core
 {
-    [CreateAssetMenu(fileName = "BiCurveGraph", menuName = "GenerationTree/Core/BiCurveGraph", order = 0)]
+    [CreateAssetMenu(fileName = "BiCurveGraph", menuName = "2D World Gen/GenerationTree/Core/BiCurveGraph", order = 0)]
     public class BiCurveGraphAlg : GenerationAlgorithm
     {
         [Header("Bi Curve Graph Settings")] 

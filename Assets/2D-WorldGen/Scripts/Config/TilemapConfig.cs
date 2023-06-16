@@ -23,7 +23,6 @@ namespace _2D_WorldGen.Scripts.Config
             public string stringID;
             public TileBase tile;
             [Range(0, float.MaxValue)] public float tileCost = 1;
-            [Range(0, 1)] public float height;
         }
 
         private record TileSettings
@@ -31,7 +30,6 @@ namespace _2D_WorldGen.Scripts.Config
             public TileBase Tile;
             public int TilemapID;
             public float TileCost = 1;
-            public float Height;
         }
 
         [SerializeField] private int tileSize;
@@ -87,11 +85,6 @@ namespace _2D_WorldGen.Scripts.Config
             return _obstacleTilemapIDs.Contains(tilemapID);
         }
 
-        public float GetHeight(int tileID)
-        {
-            return _tileDictionary[tileID].Height;
-        }
-
         public Dictionary<string, int> ReadonlyTileIdMapping => new(_tileIdMapping);
         public Dictionary<string, int> ReadonlyTilemapIdMapping => new(_tilemapIdMapping);
 
@@ -105,8 +98,7 @@ namespace _2D_WorldGen.Scripts.Config
             {
                 Tile = null,
                 TilemapID = -1, // valid for all tilemaps
-                TileCost = 1,
-                Height = -1 // valid for all heights
+                TileCost = 1
             } } };
             _obstacleTilemapIDs = new HashSet<int>();
 
@@ -148,8 +140,7 @@ namespace _2D_WorldGen.Scripts.Config
                     {
                         Tile = tile.tile,
                         TilemapID = i,
-                        TileCost = tile.tileCost,
-                        Height = tile.height
+                        TileCost = tile.tileCost
                     });
                 }
 

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace _2D_WorldGen.Scripts.GenerationTree.Core
 {
-    [CreateAssetMenu(fileName = "Inverter", menuName = "GenerationTree/Core/Inverter", order = 0)]
+    [CreateAssetMenu(fileName = "Inverter", menuName = "2D World Gen/GenerationTree/Core/Inverter", order = 0)]
     public class InverterAlg : GenerationAlgorithm
     {
         [BurstCompile(CompileSynchronously = true)]

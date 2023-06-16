@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace _2D_WorldGen.Scripts.GenerationTree.Core
 {
-    [CreateAssetMenu(fileName = "BiSubtraction", menuName = "GenerationTree/Core/BiSubtraction", order = 0)]
+    [CreateAssetMenu(fileName = "BiSubtraction", menuName = "2D World Gen/GenerationTree/Core/BiSubtraction", order = 0)]
     public class BiSubtractionAlg : GenerationAlgorithm
     {
         [Header("Bi Subtraction Settings")] public bool clamp01;

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace _2D_WorldGen.Scripts.GenerationTree.Core
 {
-    [CreateAssetMenu(fileName = "PerlinNoise", menuName = "GenerationTree/Core/PerlinNoise", order = 0)]
+    [CreateAssetMenu(fileName = "PerlinNoise", menuName = "2D World Gen/GenerationTree/Core/PerlinNoise", order = 0)]
     public class PerlinNoiseAlg : GenerationAlgorithm
     {
         [Header("Perlin Noise Settings")] 

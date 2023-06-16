@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace _2D_WorldGen.Scripts.GenerationTree.Core
 {
-    [CreateAssetMenu(fileName = "CurveGraph", menuName = "GenerationTree/Core/CurveGraph", order = 0)]
+    [CreateAssetMenu(fileName = "CurveGraph", menuName = "2D World Gen/GenerationTree/Core/CurveGraph", order = 0)]
     public class CurveGraphAlg : GenerationAlgorithm
     {
         [Header("Curve Graph Settings")] 

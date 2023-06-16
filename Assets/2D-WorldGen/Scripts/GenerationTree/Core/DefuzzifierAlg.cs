@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace _2D_WorldGen.Scripts.GenerationTree.Core
 {
-    [CreateAssetMenu(fileName = "Defuzzifier", menuName = "GenerationTree/Core/Defuzzifier", order = 0)]
+    [CreateAssetMenu(fileName = "Defuzzifier", menuName = "2D World Gen/GenerationTree/Core/Defuzzifier", order = 0)]
     public class DefuzzifierAlg : GenerationAlgorithm
     {
         [Header("Defuzzifier Settings")] public float cutoff;

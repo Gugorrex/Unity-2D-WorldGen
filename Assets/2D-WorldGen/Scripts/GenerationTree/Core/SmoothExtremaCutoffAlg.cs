@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace _2D_WorldGen.Scripts.GenerationTree.Core
 {
-    [CreateAssetMenu(fileName = "SmoothExtremaCutoff", menuName = "GenerationTree/Core/SmoothExtremaCutoff", order = 0)]
+    [CreateAssetMenu(fileName = "SmoothExtremaCutoff", menuName = "2D World Gen/GenerationTree/Core/SmoothExtremaCutoff", order = 0)]
     public class SmoothExtremaCutoffAlg : GenerationAlgorithm
     {
         [Header("Smooth Extrema Cutoff Settings")] public float yCutoff;
