@@ -47,9 +47,6 @@ MonoBehaviour:
     - stringID: Shallow Ocean
       tile: {fileID: 11400000, guid: 7dc7421ce98857640b85d1560b62e475, type: 2}
       tileCost: 0
-    - stringID: None
-      tile: {fileID: 0}
-      tileCost: 0
     - stringID: Mountain
       tile: {fileID: 11400000, guid: 53530cbda2e271f43997f41c1b2105fd, type: 2}
       tileCost: 0

@@ -1,6 +1,18 @@
 # Config
 ## Custom Tile
 workaround to manually create tiles (unity doesn't allow otherwise)
+## Generator Config
+This config determines how the raw data, calculated from generation tree nodes,
+will be applied / handled.
+
+Essentially, while the generation tree is just pure mathematics, the
+generator config is responsible to decide what to do with these results.
+
+E.g.
+- apply to tilemap (chunk) with corresponding biome specific heigth configs
+- apply to biome manager and use values to select HeightConfig when applying to tilemap
+- world structure related stuff
+- ...
 ## Config Relationship
 <b>1</b> TilemapConfig : <b>n</b> HeightConfig <br>
 ``1 : n`` relationship
