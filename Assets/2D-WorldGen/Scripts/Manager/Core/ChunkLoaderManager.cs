@@ -5,11 +5,25 @@ using UnityEngine;
 
 namespace _2D_WorldGen.Scripts.Manager.Core
 {
+    [RequireComponent(typeof(TilemapManager))]
     public class ChunkLoaderManager : MonoBehaviour
     {
         public List<ChunkLoader> chunkLoaders;
+        private readonly List<int2> _loadedChunks = new();
+        private TilemapManager _tilemapManager;
 
-        public bool NextChunkToLoad(List<int2> loadedChunks, out int2 chunkToLoad, out List<int2> chunksToRemove)
+        private void Awake()
+        {
+            _tilemapManager = GetComponent<TilemapManager>();
+        }
+
+        /// <summary>
+        /// updates loading range of chunks. The loading range can lose as many chunks as needed.
+        /// However, only one chunk can be added per call, to allow the world generator to generate one chunk per frame.
+        /// </summary>
+        /// <param name="chunkToGenerate"></param>
+        /// <returns>true if a chunk needs to be generated</returns>
+        public bool UpdateLoadingRange(out int2 chunkToGenerate)
         {
             // Append all chunk loaders normalized chunk coordinates to loading range
             var accList = new List<ChunkLoader.PriorityCoords>();
@@ -21,19 +35,26 @@ namespace _2D_WorldGen.Scripts.Manager.Core
             var loadingRange = accList.Select(pc => pc.Coords).Distinct().ToList();
             
             // remove already loaded chunks which are no longer in the loading range
-            chunksToRemove = loadedChunks.ToList().Except(loadingRange.ToList()).ToList(); // out-parameter
-            
+            var chunksToRemove = _loadedChunks.ToList().Except(loadingRange.ToList()).ToList();
+            foreach (var chunk in chunksToRemove)
+            {
+                _tilemapManager.RemoveChunk(chunk);
+                _tilemapManager.RefreshChunk(chunk);
+                _loadedChunks.Remove(chunk);
+            }
+
             // determine chunks to load by removing loaded chunks
-            var diffLoadingRange = loadingRange.ToList().Except(loadedChunks.ToList()).ToList();
+            var diffLoadingRange = loadingRange.ToList().Except(_loadedChunks.ToList()).ToList();
             
             // -> chunks which are in loading range and are already loaded are untouched!
 
             if (diffLoadingRange.Count > 0)
             {
-                chunkToLoad = diffLoadingRange[0];
+                chunkToGenerate = diffLoadingRange[0];
+                _loadedChunks.Add(chunkToGenerate);
                 return true;
             }
-            chunkToLoad = int2.zero;
+            chunkToGenerate = int2.zero;
             return false;
         }
         

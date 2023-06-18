@@ -15,6 +15,8 @@ namespace _2D_WorldGen.Scripts.Manager.Core
         [SerializeField] private TilemapConfig tilemapConfig;
         [SerializeField] private TaggedTilemap[] taggedTilemaps;
 
+        private WorldGenerator _worldGenerator;
+
         [Serializable]
         public struct TaggedTilemap
         {
@@ -22,12 +24,20 @@ namespace _2D_WorldGen.Scripts.Manager.Core
             public Tilemap tilemap;
         }
 
-        public Dictionary<int, Tilemap> Tilemaps => taggedTilemaps.ToDictionary(
+        private Dictionary<int, Tilemap> Tilemaps => taggedTilemaps.ToDictionary(
             tilemap => tilemapConfig.GetTilemapID(tilemap.stringID), 
             tilemap => tilemap.tilemap);
 
-        public void RenderChunk(int2 chunkCoords, int chunkSize, NativeArray<int> chunk)
+        public TilemapConfig TilemapConfig => tilemapConfig;
+
+        private void Awake()
         {
+            _worldGenerator = GetComponent<WorldGenerator>();
+        }
+
+        public void RenderChunk(int2 chunkCoords, NativeArray<int> chunk)
+        {
+            var chunkSize = _worldGenerator.ChunkSize;
             var positionsArray = new Vector3Int[chunkSize * chunkSize];
             var tilesArray = new TileBase[chunkSize * chunkSize];
 
@@ -56,8 +66,9 @@ namespace _2D_WorldGen.Scripts.Manager.Core
             }
         }
 
-        public void RefreshChunk(int2 chunkCoords, int chunkSize)
+        public void RefreshChunk(int2 chunkCoords)
         {
+            var chunkSize = _worldGenerator.ChunkSize;
             for (var x = 0; x < chunkSize; x++)
             {
                 for (var y = 0; y < chunkSize; y++)
@@ -72,8 +83,9 @@ namespace _2D_WorldGen.Scripts.Manager.Core
             }
         }
 
-        public void RemoveChunk(int2 chunkCoords, int chunkSize)
+        public void RemoveChunk(int2 chunkCoords)
         {
+            var chunkSize = _worldGenerator.ChunkSize;
             var positionsArray = new Vector3Int[chunkSize * chunkSize];
             var tilesArray = new TileBase[chunkSize * chunkSize];
             
