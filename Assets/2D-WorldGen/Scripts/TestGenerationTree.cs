@@ -13,7 +13,7 @@ namespace _2D_WorldGen.Scripts
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                var cycleData = new GenerationCycleData(0, int2.zero, 2);
+                var cycleData = new GenerationCycleData(0, int2.zero, 2, 1);
                 curveGraphAlg.ScheduleAll(cycleData).Complete();
                 foreach (var value in curveGraphAlg.GetResults())
                 {

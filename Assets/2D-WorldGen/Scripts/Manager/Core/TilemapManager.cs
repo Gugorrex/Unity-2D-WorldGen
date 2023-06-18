@@ -33,6 +33,7 @@ namespace _2D_WorldGen.Scripts.Manager.Core
         private void Awake()
         {
             _worldGenerator = GetComponent<WorldGenerator>();
+            tilemapConfig.CreateDictionaries();
         }
 
         public void RenderChunk(int2 chunkCoords, NativeArray<int> chunk)
