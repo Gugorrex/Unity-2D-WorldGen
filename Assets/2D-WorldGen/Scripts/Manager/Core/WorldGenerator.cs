@@ -70,6 +70,7 @@ namespace _2D_WorldGen.Scripts.Manager.Core
                         jobHandle.Complete();
                         _tilemapManager.RenderChunk(chunkCoords, job.Chunk);
                         _tilemapManager.RefreshChunk(chunkCoords);
+                        job.Chunk.Dispose();
                         break;
                     
                     default:
