@@ -125,7 +125,11 @@ namespace _2D_WorldGen.Scripts.Manager.Core
                     // If the height is smaller or equal then use this tileSetting (j)
                     if (!(Noise[i] <= TileSettingsArray[j].Height)) continue;
 
-                    Chunk[TileSettingsArray[j].TilemapID * ChunkSize * ChunkSize + i] = TileSettingsArray[j].ID;
+                    if (TileSettingsArray[j].ID != 0) // ignore intended null / empty tiles (empty stringID / 0)
+                    {
+                        Chunk[TileSettingsArray[j].TilemapID * ChunkSize * ChunkSize + i] = TileSettingsArray[j].ID;
+                    }
+
                     break;
                 }
             }

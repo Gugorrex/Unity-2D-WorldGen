@@ -59,7 +59,10 @@ namespace _2D_WorldGen.Scripts.Manager.Core
                     for (var y = 0; y < chunkSize; y++)
                     {
                         var tileID = chunk[tilemap.Key * zOffset + y * chunkSize + x];
-                        tilesArray[y * chunkSize + x] = tilemapConfig.GetTile(tileID);
+                        var prevTile = tilemap.Value.GetTile(new Vector3Int(chunkCoords.x * chunkSize + x, 
+                            chunkCoords.y * chunkSize + y));
+                        var prevID = prevTile != null ? tilemapConfig.GetTileID(prevTile) : 0;
+                        tilesArray[y * chunkSize + x] = prevID == 0 ? tilemapConfig.GetTile(tileID) : prevTile;
                     }
                 }
             

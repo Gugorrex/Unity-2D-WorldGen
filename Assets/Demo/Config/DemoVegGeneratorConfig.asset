@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a35417b5512748de8f713dbc17a853e0, type: 3}
+  m_Name: DemoVegGeneratorConfig
+  m_EditorClassIdentifier: 
+  action: 0
+  heightConfigsMap:
+  - id: 0
+    heightConfig: {fileID: 11400000, guid: ef619cc1b5138b745895030203108846, type: 2}

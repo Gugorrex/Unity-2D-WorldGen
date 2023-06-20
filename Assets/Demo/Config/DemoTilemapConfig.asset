@@ -37,7 +37,10 @@ MonoBehaviour:
       tileCost: 1
   - stringID: GroundOverlay
     isObstacle: 0
-    tileConfigurations: []
+    tileConfigurations:
+    - stringID: Vegetation
+      tile: {fileID: 11400000, guid: f7c4b46cfa0448e479d851b461a1b266, type: 2}
+      tileCost: 0
   - stringID: Obstacle
     isObstacle: 1
     tileConfigurations:
