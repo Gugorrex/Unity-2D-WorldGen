@@ -14,6 +14,7 @@ namespace _2D_WorldGen.Scripts.Manager.Core
     {
         [SerializeField] private int seed;
         [SerializeField] private int chunkSize;
+        [SerializeField] private int batchSize = 32;
         [SerializeField] private NodeConfigMatch[] generationSchedule;
 
         private TilemapManager _tilemapManager;
@@ -33,8 +34,7 @@ namespace _2D_WorldGen.Scripts.Manager.Core
             _tilemapManager = GetComponent<TilemapManager>();
             _chunkLoaderManager = GetComponent<ChunkLoaderManager>();
         }
-
-        // TODO refactor
+        
         private void Update()
         {
             if (_chunkLoaderManager.UpdateLoadingRange(out var chunkToGenerate))
@@ -42,8 +42,7 @@ namespace _2D_WorldGen.Scripts.Manager.Core
                 GenerateChunk(chunkToGenerate);
             }
         }
-
-        // TODO refactor
+        
         private void GenerateChunk(int2 chunkCoords)
         {
             var cycleData = new GenerationCycleData(seed, chunkCoords, chunkSize, 
@@ -57,26 +56,30 @@ namespace _2D_WorldGen.Scripts.Manager.Core
                 switch (config.generatorConfig.action)
                 {
                     case GeneratorConfig.GeneratorAction.ApplyChunk:
-                        var job = new NoiseToTilesJob()
-                        {
-                            Noise = config.generationAlgorithm.GetResults(),
-                            Chunk = new NativeArray<int>(cycleData.ArrayLength * cycleData.TilemapCount, Allocator.TempJob),
-                            TileSettingsArray = GetTileSettings(config.generatorConfig
-                                    .HeightConfigs[0]), // TODO implement biome or general ID based heightConfig selection
-                            ChunkSize = chunkSize
-                        };
-                        var jobHandle = job.ScheduleParallel(cycleData.ArrayLength, 32 /*TODO fix hardcode*/, default);
-                        job.TileSettingsArray.Dispose(jobHandle);
-                        jobHandle.Complete();
-                        _tilemapManager.RenderChunk(chunkCoords, job.Chunk);
-                        _tilemapManager.RefreshChunk(chunkCoords);
-                        job.Chunk.Dispose();
+                        ApplyChunk(cycleData, config);
                         break;
                     
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
             }
+        }
+
+        private void ApplyChunk(GenerationCycleData cycleData, NodeConfigMatch config)
+        {
+            var job = new NoiseToTilesJob()
+            {
+                Noise = config.generationAlgorithm.GetResults(),
+                Chunk = new NativeArray<int>(cycleData.ArrayLength * cycleData.TilemapCount, Allocator.TempJob),
+                TileSettingsArray = GetTileSettings(config.generatorConfig.HeightConfigs[0]), // TODO implement biomes or general ID based heightConfig selection
+                ChunkSize = chunkSize
+            };
+            var jobHandle = job.ScheduleParallel(cycleData.ArrayLength, batchSize, default);
+            job.TileSettingsArray.Dispose(jobHandle);
+            jobHandle.Complete();
+            _tilemapManager.RenderChunk(cycleData.ChunkCoords, job.Chunk);
+            _tilemapManager.RefreshChunk(cycleData.ChunkCoords);
+            job.Chunk.Dispose();
         }
 
         private NativeArray<TileSettings> GetTileSettings(HeightConfig heightConfig)
@@ -98,15 +101,14 @@ namespace _2D_WorldGen.Scripts.Manager.Core
             return tileSettings;
         }
 
-        public struct TileSettings
+        private struct TileSettings
         {
             public int ID;
             public float Height;
             public int TilemapID;
         }
 
-        // TODO maybe refactor / move to another file?
-        public struct NoiseToTilesJob : IJobFor
+        private struct NoiseToTilesJob : IJobFor
         {
             [ReadOnly] public NativeArray<float> Noise;
             [ReadOnly] public NativeArray<TileSettings> TileSettingsArray;

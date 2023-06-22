@@ -365,7 +365,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02268c11904045fb9792b64b9060cca5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radiusInChunks: 3
+  radiusInChunks: 8
 --- !u!114 &519420035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,6 +380,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seed: 0
   chunkSize: 16
+  batchSize: 32
   generationSchedule:
   - generationAlgorithm: {fileID: 11400000, guid: 48f9cc01c53a48242a7cfa03b0080f25, type: 2}
     generatorConfig: {fileID: 11400000, guid: 684fea18a6eb53944a99cc134238027e, type: 2}

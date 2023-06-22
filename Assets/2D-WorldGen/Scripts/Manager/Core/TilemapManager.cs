@@ -108,6 +108,7 @@ namespace _2D_WorldGen.Scripts.Manager.Core
             }
         }
 
+        /* migrated from old project worldGenV2 (private) */
         /* TODO find out if we want to use chunk as input or directly use worldCoords -> where do we need these methods?
         public void RenderTile(int2 worldCoords, int chunkSize)
         {
