@@ -16,3 +16,5 @@ MonoBehaviour:
   heightConfigsMap:
   - id: 0
     heightConfig: {fileID: 11400000, guid: ef619cc1b5138b745895030203108846, type: 2}
+  - id: 1
+    heightConfig: {fileID: 11400000, guid: ef619cc1b5138b745895030203108846, type: 2}

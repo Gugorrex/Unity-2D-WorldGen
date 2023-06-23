@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using _2D_WorldGen.Scripts.Config;
 using _2D_WorldGen.Scripts.GenerationTree;
 using Unity.Collections;
@@ -67,35 +69,49 @@ namespace _2D_WorldGen.Scripts.Manager.Core
 
         private void ApplyChunk(GenerationCycleData cycleData, NodeConfigMatch config)
         {
-            var job = new NoiseToTilesJob()
+            var biomes = new NativeArray<int>(cycleData.ArrayLength, Allocator.TempJob); // default = 0
+            biomes[0] = 1;
+            var job = new NoiseToTilesJob
             {
                 Noise = config.generationAlgorithm.GetResults(),
-                Chunk = new NativeArray<int>(cycleData.ArrayLength * cycleData.TilemapCount, Allocator.TempJob),
-                TileSettingsArray = GetTileSettings(config.generatorConfig.HeightConfigs[0]), // TODO implement biomes or general ID based heightConfig selection
+                Chunk = new NativeArray<int>(cycleData.ArrayLength * cycleData.TilemapCount,
+                    Allocator.TempJob),
+                TileSettingsArray = GetTileSettings(config.generatorConfig.HeightConfigs, out var indices),
+                Indices = indices,
+                Biomes = biomes, // default = 0 // TODO implement biomes or general ID based heightConfig selection
                 ChunkSize = chunkSize
             };
             var jobHandle = job.ScheduleParallel(cycleData.ArrayLength, batchSize, default);
             job.TileSettingsArray.Dispose(jobHandle);
+            job.Indices.Dispose(jobHandle);
+            job.Biomes.Dispose(jobHandle);
             jobHandle.Complete();
             _tilemapManager.RenderChunk(cycleData.ChunkCoords, job.Chunk);
             _tilemapManager.RefreshChunk(cycleData.ChunkCoords);
             job.Chunk.Dispose();
         }
 
-        private NativeArray<TileSettings> GetTileSettings(HeightConfig heightConfig)
+        private NativeArray<TileSettings> GetTileSettings(Dictionary<int,HeightConfig> heightConfigMap, out NativeHashMap<int,int2> indices)
         {
             var tilemapConfig = _tilemapManager.TilemapConfig;
-            var tileSettings = new NativeArray<TileSettings>(heightConfig.tileHeights.Length, Allocator.TempJob);
+            var length = heightConfigMap.Values.Sum(heightConfig => heightConfig.tileHeights.Length);
+            var tileSettings = new NativeArray<TileSettings>(length, Allocator.TempJob);
+            indices = new NativeHashMap<int,int2>(heightConfigMap.Count, Allocator.TempJob);
 
-            for (var i = 0; i < heightConfig.tileHeights.Length; i++)
+            var i = 0;
+            foreach (var (key, heightConfig) in heightConfigMap)
             {
-                var settings = new TileSettings
+                indices.Add(key, new int2(i, i + heightConfig.tileHeights.Length - 1));
+                for (var j = 0; j < heightConfig.tileHeights.Length; j++)
                 {
-                    ID = tilemapConfig.GetTileID(heightConfig.tileHeights[i].tileStringID),
-                    Height = heightConfig.tileHeights[i].height
-                };
-                settings.TilemapID = tilemapConfig.GetTileTilemapID(settings.ID);
-                tileSettings[i] = settings;
+                    var settings = new TileSettings
+                    {
+                        ID = tilemapConfig.GetTileID(heightConfig.tileHeights[j].tileStringID),
+                        Height = heightConfig.tileHeights[j].height,
+                    };
+                    settings.TilemapID = tilemapConfig.GetTileTilemapID(settings.ID);
+                    tileSettings[i++] = settings;
+                }
             }
 
             return tileSettings;
@@ -112,6 +128,8 @@ namespace _2D_WorldGen.Scripts.Manager.Core
         {
             [ReadOnly] public NativeArray<float> Noise;
             [ReadOnly] public NativeArray<TileSettings> TileSettingsArray;
+            [ReadOnly] public NativeHashMap<int, int2> Indices;
+            [ReadOnly] public NativeArray<int> Biomes;
             [ReadOnly] public int ChunkSize;
             
             // 3d Chunk (2x ChunkSize, 1x TilemapID) leads to ParallelFor IndexOutOfRange Error due to Safety System
@@ -121,8 +139,10 @@ namespace _2D_WorldGen.Scripts.Manager.Core
 
             public void Execute(int i)
             {
+                var index = Indices[Biomes[i]];
+                
                 // Loop over configured tile settings
-                for (var j = 0; j < TileSettingsArray.Length; j++)
+                for (var j = index.x; j <= index.y; j++)
                 {
                     // If the height is smaller or equal then use this tileSetting (j)
                     if (!(Noise[i] <= TileSettingsArray[j].Height)) continue;
