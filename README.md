@@ -58,4 +58,4 @@ also known as perlin worms
 
 ### Basic Desert Biome
 
-![](Assets/Docs/Resources/Demo/desert biome.png)
+![](Assets/Docs/Resources/Demo/desert-biome.png)
