@@ -2,7 +2,7 @@
 
 namespace _2D_WorldGen.Scripts.Utils
 {
-    public static class GridCoordsConverter
+    public struct GridCoordsConverter
     {
         public static int2 WorldToSubGridCoords(int subGridSize, int2 worldCoords, out int2 localSubCoords)
         {

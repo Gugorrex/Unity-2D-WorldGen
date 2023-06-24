@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc9f4d6b7e714b6281f2471fa49293f6, type: 3}
+  m_Name: Voronoi
+  m_EditorClassIdentifier: 
+  batchSize: 32
+  dependencies:
+  - {fileID: 11400000, guid: 2ed7df64ee92b414d8e00101333b0d12, type: 2}
+  - {fileID: 11400000, guid: b09edb791cb8b914687108b127f6d143, type: 2}
+  gridSize: 16
+  typeCount: 10
+  offsetStrength: 10
