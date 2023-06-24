@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using _2D_WorldGen.Scripts.Config;
 using _2D_WorldGen.Scripts.GenerationTree;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -124,6 +125,7 @@ namespace _2D_WorldGen.Scripts.Manager.Core
             public int TilemapID;
         }
 
+        [BurstCompile(CompileSynchronously = true)]
         private struct NoiseToTilesJob : IJobFor
         {
             [ReadOnly] public NativeArray<float> Noise;
