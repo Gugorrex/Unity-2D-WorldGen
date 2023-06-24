@@ -28,6 +28,7 @@ namespace _2D_WorldGen.Scripts.Manager.Core
         [Serializable]
         public struct NodeConfigMatch
         {
+            public bool active;
             public GenerationAlgorithm generationAlgorithm;
             public GeneratorConfig generatorConfig;
         }
@@ -50,28 +51,35 @@ namespace _2D_WorldGen.Scripts.Manager.Core
         {
             var cycleData = new GenerationCycleData(seed, chunkCoords, chunkSize, 
                 _tilemapManager.TilemapConfig.ReadonlyTilemapIdMapping.Count);
-            
+            var biomes = new NativeArray<int>(cycleData.ArrayLength, Allocator.Persistent);
+
             foreach (var config in generationSchedule)
             {
+                if (!config.active) continue;
+                
                 var handle = config.generationAlgorithm.ScheduleAll(cycleData);
                 handle.Complete();
 
                 switch (config.generatorConfig.action)
                 {
                     case GeneratorConfig.GeneratorAction.ApplyChunk:
-                        ApplyChunk(cycleData, config);
+                        ApplyChunk(cycleData, config, biomes);
+                        break;
+                    
+                    case GeneratorConfig.GeneratorAction.ApplyBiomes:
+                        ApplyBiomes(biomes, config);
                         break;
                     
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
             }
+
+            biomes.Dispose();
         }
 
-        private void ApplyChunk(GenerationCycleData cycleData, NodeConfigMatch config)
+        private void ApplyChunk(GenerationCycleData cycleData, NodeConfigMatch config, NativeArray<int> biomes)
         {
-            var biomes = new NativeArray<int>(cycleData.ArrayLength, Allocator.TempJob); // default = 0
-            biomes[0] = 1;
             var job = new NoiseToTilesJob
             {
                 Noise = config.generationAlgorithm.GetResults(),
@@ -85,11 +93,21 @@ namespace _2D_WorldGen.Scripts.Manager.Core
             var jobHandle = job.ScheduleParallel(cycleData.ArrayLength, batchSize, default);
             job.TileSettingsArray.Dispose(jobHandle);
             job.Indices.Dispose(jobHandle);
-            job.Biomes.Dispose(jobHandle);
             jobHandle.Complete();
             _tilemapManager.RenderChunk(cycleData.ChunkCoords, job.Chunk);
             _tilemapManager.RefreshChunk(cycleData.ChunkCoords);
             job.Chunk.Dispose();
+        }
+
+        private void ApplyBiomes(NativeArray<int> biomes, NodeConfigMatch config)
+        {
+            var rawBiomes = config.generationAlgorithm.GetResults();
+            var biomesCount = config.generatorConfig.biomesCount;
+            
+            for (var i = 0; i < rawBiomes.Length; i++)
+            {
+                biomes[i] = (int)(rawBiomes[i] * biomesCount);
+            }
         }
 
         private NativeArray<TileSettings> GetTileSettings(Dictionary<int,HeightConfig> heightConfigMap, out NativeHashMap<int,int2> indices)

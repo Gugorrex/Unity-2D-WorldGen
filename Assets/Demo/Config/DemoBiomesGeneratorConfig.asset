@@ -10,12 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a35417b5512748de8f713dbc17a853e0, type: 3}
-  m_Name: DemoBaseGeneratorConfig
+  m_Name: DemoBiomesGeneratorConfig
   m_EditorClassIdentifier: 
-  action: 0
-  biomesCount: 0
-  heightConfigsMap:
-  - id: 0
-    heightConfig: {fileID: 11400000, guid: 154aef449b913b248ac9f615349023de, type: 2}
-  - id: 1
-    heightConfig: {fileID: 11400000, guid: 0cf287344a268394ca704c2d20f3cbc4, type: 2}
+  action: 1
+  biomesCount: 2
+  heightConfigsMap: []

@@ -49,3 +49,13 @@ also known as perlin worms
 ### RiverIsTeBiSubtraction
 
 ![](Assets/Docs/Resources/Demo/RiverIsTeBiSubtraction.png)
+
+<hr>
+
+### Voronoi Biomes
+
+![](Assets/Docs/Resources/Demo/biomes.png)
+
+### Basic Desert Biome
+
+![](Assets/Docs/Resources/Demo/desert biome.png)

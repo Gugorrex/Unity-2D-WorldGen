@@ -9,6 +9,7 @@ namespace _2D_WorldGen.Scripts.Config
     public class GeneratorConfig : ScriptableObject
     {
         public GeneratorAction action;
+        public int biomesCount;
         
         [SerializeField] private HeightConfigsMapEntry[] heightConfigsMap;
 
@@ -24,7 +25,8 @@ namespace _2D_WorldGen.Scripts.Config
         [Serializable]
         public enum GeneratorAction
         {
-            ApplyChunk
+            ApplyChunk,
+            ApplyBiomes
         }
         
     }

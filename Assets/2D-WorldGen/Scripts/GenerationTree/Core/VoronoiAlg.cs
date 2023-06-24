@@ -38,7 +38,7 @@ namespace _2D_WorldGen.Scripts.GenerationTree.Core
                 var y = i / ChunkSize;
                 var offset = new int2((int)(OffsetsX[i] * OffsetStrength), (int)(OffsetsY[i] * OffsetStrength));
                 var worldCoords = GridCoordsConverter.SubToWorldGridCoords(ChunkSize, ChunkCoords) + new int2(x, y) + offset;
-                VoronoiTypeMap[i] = GetType(worldCoords, VoronoiGridSize, Seed, TypeCount) / (float)TypeCount; // TODO check 0..1 float vs 0,1,2... int
+                VoronoiTypeMap[i] = GetType(worldCoords, VoronoiGridSize, Seed, TypeCount) / (float)TypeCount;
             }
             
             private static int2 GetClosestSeed(int2 currentPos, NativeArray<int2> voronoiSeeds)

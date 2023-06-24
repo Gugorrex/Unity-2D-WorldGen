@@ -10,8 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4483839adcdd45f9a2a673dbe5dc4ca1, type: 3}
-  m_Name: OneHeightConfig
+  m_Name: DemoDesertHeightConfig
   m_EditorClassIdentifier: 
   tileHeights:
-  - tileStringID: End
+  - tileStringID: Deep Ocean
+    height: 0.125
+  - tileStringID: Shallow Ocean
+    height: 0.25
+  - tileStringID: Beach
     height: 1
