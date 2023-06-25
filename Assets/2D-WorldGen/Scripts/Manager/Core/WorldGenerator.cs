@@ -15,6 +15,7 @@ namespace _2D_WorldGen.Scripts.Manager.Core
     [RequireComponent(typeof(ChunkLoaderManager))]
     public class WorldGenerator : MonoBehaviour
     {
+        public bool debugMode = false;
         [SerializeField] private int seed;
         [SerializeField] private int chunkSize;
         [SerializeField] private int batchSize = 32;
@@ -56,9 +57,20 @@ namespace _2D_WorldGen.Scripts.Manager.Core
             foreach (var config in generationSchedule)
             {
                 if (!config.active) continue;
+
+                if (debugMode)
+                {
+                    for (var i = 0; i < cycleData.ChunkSize * cycleData.ChunkSize; i++)
+                    {
+                        config.generationAlgorithm.ExecuteOne(i, cycleData);
+                    }
+                }
+                else
+                {
+                    var handle = config.generationAlgorithm.ScheduleAll(cycleData);
+                    handle.Complete();
+                }
                 
-                var handle = config.generationAlgorithm.ScheduleAll(cycleData);
-                handle.Complete();
 
                 switch (config.generatorConfig.action)
                 {

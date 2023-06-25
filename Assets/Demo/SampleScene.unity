@@ -378,15 +378,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc81e36e1e3548a286c70755a1ead0d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugMode: 0
   seed: 0
   chunkSize: 16
   batchSize: 32
   generationSchedule:
-  - active: 1
+  - active: 0
     generationAlgorithm: {fileID: 11400000, guid: 06346074058b59345aa6f134893167e5, type: 2}
     generatorConfig: {fileID: 11400000, guid: 50b684bd772525c4da7c6baef37e3302, type: 2}
   - active: 1
-    generationAlgorithm: {fileID: 11400000, guid: 48f9cc01c53a48242a7cfa03b0080f25, type: 2}
+    generationAlgorithm: {fileID: 11400000, guid: b20c05aa3d280444eb4114ce0bdccbe5, type: 2}
     generatorConfig: {fileID: 11400000, guid: 684fea18a6eb53944a99cc134238027e, type: 2}
   - active: 0
     generationAlgorithm: {fileID: 11400000, guid: 60c46e9c188ea3f40a1eecffd49ef742, type: 2}
