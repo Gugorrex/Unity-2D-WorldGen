@@ -9,14 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69f74ba3eb8f4f528a38fc8e1466fca2, type: 3}
-  m_Name: VoronoiBorderNoise
+  m_Script: {fileID: 11500000, guid: 06bc6251ffca42218937f2ebddeaba18, type: 3}
+  m_Name: BiomeBorderIslandBiSubtraction
   m_EditorClassIdentifier: 
   batchSize: 32
   dependencies:
-  - {fileID: 11400000, guid: 2ed7df64ee92b414d8e00101333b0d12, type: 2}
-  - {fileID: 11400000, guid: b09edb791cb8b914687108b127f6d143, type: 2}
-  gridSize: 32
-  typeCount: 10
-  borderZone: 15
-  offsetStrength: 10
+  - {fileID: 11400000, guid: aadea573777e5eb418eaf2b91e88f606, type: 2}
+  - {fileID: 11400000, guid: b20c05aa3d280444eb4114ce0bdccbe5, type: 2}
+  clamp01: 1

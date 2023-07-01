@@ -42,8 +42,12 @@ namespace _2D_WorldGen.Scripts.GenerationTree
             ValidateCycle(cycleData);
 
             // execution would be redundant, results are already calculated -> exit
-            if (_scheduled && _jobHandle.IsCompleted)
+            if (_scheduled)
             {
+                if (!_jobHandle.IsCompleted)
+                {
+                    _jobHandle.Complete();
+                }
                 return _jobHandle;
             }
 

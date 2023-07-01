@@ -333,7 +333,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 560, y: -313, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -383,11 +383,11 @@ MonoBehaviour:
   chunkSize: 16
   batchSize: 32
   generationSchedule:
-  - active: 0
+  - active: 1
     generationAlgorithm: {fileID: 11400000, guid: 06346074058b59345aa6f134893167e5, type: 2}
     generatorConfig: {fileID: 11400000, guid: 50b684bd772525c4da7c6baef37e3302, type: 2}
   - active: 1
-    generationAlgorithm: {fileID: 11400000, guid: b20c05aa3d280444eb4114ce0bdccbe5, type: 2}
+    generationAlgorithm: {fileID: 11400000, guid: 21228251ed8eb8b41a71d0db1bc0e66d, type: 2}
     generatorConfig: {fileID: 11400000, guid: 684fea18a6eb53944a99cc134238027e, type: 2}
   - active: 0
     generationAlgorithm: {fileID: 11400000, guid: 60c46e9c188ea3f40a1eecffd49ef742, type: 2}
