@@ -19,3 +19,5 @@ MonoBehaviour:
     heightConfig: {fileID: 11400000, guid: 154aef449b913b248ac9f615349023de, type: 2}
   - id: 1
     heightConfig: {fileID: 11400000, guid: 0cf287344a268394ca704c2d20f3cbc4, type: 2}
+  - id: 2
+    heightConfig: {fileID: 11400000, guid: 0d933cfe1eae47e46afbcc3c0054bf06, type: 2}

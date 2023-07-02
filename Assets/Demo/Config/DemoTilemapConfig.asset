@@ -32,6 +32,12 @@ MonoBehaviour:
     - stringID: Start
       tile: {fileID: 11400000, guid: bcfd6cdec415ff343bef18455b5a8e59, type: 2}
       tileCost: 1
+    - stringID: Desert1
+      tile: {fileID: 11400000, guid: 0f12979635daa35428da3ba7e9ff73dc, type: 2}
+      tileCost: 1
+    - stringID: Desert2
+      tile: {fileID: 11400000, guid: 1e428c471eab48749b8d646ccd9e242c, type: 2}
+      tileCost: 1
     - stringID: End
       tile: {fileID: 11400000, guid: dde3ea61f38bbf4418e36d1682c51c4e, type: 2}
       tileCost: 1

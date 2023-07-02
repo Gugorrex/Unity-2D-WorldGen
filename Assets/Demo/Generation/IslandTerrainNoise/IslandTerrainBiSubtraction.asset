@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   batchSize: 32
   dependencies:
-  - {fileID: 11400000, guid: ab56229da3d40b74b8502dc9ea4900d9, type: 2}
+  - {fileID: 11400000, guid: 9691e51446bd69941b51e54ae902f4c4, type: 2}
   - {fileID: 11400000, guid: 5bb70b87537d5ff479f1a2d2fc00a034, type: 2}
   clamp01: 1

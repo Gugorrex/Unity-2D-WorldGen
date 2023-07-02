@@ -16,6 +16,12 @@ namespace _2D_WorldGen.Scripts.GenerationTree.Core
         public float noiseScale;
         public Vector2Int additionalOffset;
 
+        [Header("Biome Settings")] 
+        public int biomeID = 0;
+        public int biomeCount = 1;
+        public bool useDefaultBiome = true;
+        public bool usePreviousNoise = false;
+
         [Serializable]
         public struct OctaveSettings
         {
@@ -40,9 +46,21 @@ namespace _2D_WorldGen.Scripts.GenerationTree.Core
             [ReadOnly] public NativeArray<OctaveConfig> OctaveConfigs;
             [ReadOnly] public float Scale;
             public NativeArray<float> Output;
+            
+            // Biomes
+            [ReadOnly] public int BiomeID;
+            [ReadOnly] public int BiomeCount;
+            [ReadOnly] public NativeArray<float> PreviousNoise;
+            [ReadOnly] public NativeArray<float> NormBiomeNoise; // 0..1 * BiomeCount = BiomeID
 
             public void Execute(int index)
             {
+                if (BiomeID != (int)(NormBiomeNoise[index] * BiomeCount))
+                {
+                    Output[index] = PreviousNoise[index];
+                    return;
+                }
+                
                 var x = index % ChunkSize;
                 var y = index / ChunkSize;
                 
@@ -67,7 +85,7 @@ namespace _2D_WorldGen.Scripts.GenerationTree.Core
         }
         
         private PerlinNoiseJob CreateJob(int seed, int2 chunkCoords, int chunkSize, NativeArray<float> output,
-            OctaveSettings[] octaveSettings, out NativeArray<OctaveConfig> octaveConfigs)
+            OctaveSettings[] octaveSettings, List<NativeArray<float>> inputs, out NativeArray<OctaveConfig> octaveConfigs)
         {
             // 1. Variables Setup
 
@@ -98,7 +116,11 @@ namespace _2D_WorldGen.Scripts.GenerationTree.Core
                 ChunkSize = chunkSize,
                 OctaveConfigs = octaveConfigs,
                 Scale = scale,
-                Output = output
+                Output = output,
+                BiomeID = biomeID,
+                BiomeCount = biomeCount,
+                NormBiomeNoise = useDefaultBiome ? new NativeArray<float>(output.Length, Allocator.TempJob) : inputs[0],
+                PreviousNoise = !usePreviousNoise ? new NativeArray<float>(output.Length, Allocator.TempJob) : inputs[1]
             };
 
             return job;
@@ -107,9 +129,18 @@ namespace _2D_WorldGen.Scripts.GenerationTree.Core
         protected override JobHandle Schedule(GenerationCycleData cycleData, List<NativeArray<float>> inputs, NativeArray<float> output, JobHandle dependsOn = default)
         {
             var job = CreateJob(cycleData.Seed, cycleData.ChunkCoords, cycleData.ChunkSize,
-                output, octaveSettingsArray, out var octaveConfigs);
+                output, octaveSettingsArray, inputs, out var octaveConfigs);
             var handle = job.ScheduleParallel(cycleData.ArrayLength, batchSize, dependsOn);
 
+            if (useDefaultBiome)
+            {
+                job.NormBiomeNoise.Dispose(handle);
+            }
+            if (!usePreviousNoise)
+            {
+                job.PreviousNoise.Dispose(handle);
+            }
+            
             octaveConfigs.Dispose(handle);
             return handle;
         }
@@ -117,9 +148,18 @@ namespace _2D_WorldGen.Scripts.GenerationTree.Core
         protected override void Execute(int index, GenerationCycleData cycleData, List<NativeArray<float>> inputs, NativeArray<float> output)
         {
             var job = CreateJob(cycleData.Seed, cycleData.ChunkCoords, cycleData.ChunkSize,
-                output, octaveSettingsArray, out var octaveConfigs);
+                output, octaveSettingsArray, inputs, out var octaveConfigs);
             job.Execute(index);
             octaveConfigs.Dispose();
+            
+            if (useDefaultBiome)
+            {
+                job.NormBiomeNoise.Dispose();
+            }
+            if (!usePreviousNoise)
+            {
+                job.PreviousNoise.Dispose();
+            }
         }
     }
 }

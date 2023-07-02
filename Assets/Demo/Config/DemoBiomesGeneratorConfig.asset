@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: DemoBiomesGeneratorConfig
   m_EditorClassIdentifier: 
   action: 1
-  biomesCount: 2
+  biomesCount: 3
   heightConfigsMap: []

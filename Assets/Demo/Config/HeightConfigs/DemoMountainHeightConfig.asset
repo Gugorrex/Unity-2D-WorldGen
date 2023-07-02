@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4483839adcdd45f9a2a673dbe5dc4ca1, type: 3}
-  m_Name: DemoDesertHeightConfig
+  m_Name: DemoMountainHeightConfig
   m_EditorClassIdentifier: 
   tileHeights:
   - tileStringID: Deep Ocean
@@ -18,8 +18,14 @@ MonoBehaviour:
   - tileStringID: Shallow Ocean
     height: 0.25
   - tileStringID: Beach
-    height: 0.4
-  - tileStringID: Desert1
-    height: 0.525
-  - tileStringID: Desert2
+    height: 0.35
+  - tileStringID: Low Lands
+    height: 0.48
+  - tileStringID: High Lands
+    height: 0.58
+  - tileStringID: Dirt
+    height: 0.68
+  - tileStringID: Mountain
+    height: 0.8
+  - tileStringID: Snow
     height: 1
