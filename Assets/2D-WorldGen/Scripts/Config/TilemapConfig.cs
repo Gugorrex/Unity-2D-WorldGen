@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -40,6 +41,9 @@ namespace _2D_WorldGen.Scripts.Config
         private Dictionary<TileBase, int> _tileBaseIdMapping;
         private Dictionary<string, int> _tilemapIdMapping;
         private HashSet<int> _obstacleTilemapIDs;
+
+        public NativeHashSet<int> ObstacleMap { private set; get; }
+        public NativeHashMap<int, float> TileCostsMap { private set; get; }
 
         public int TileSize => tileSize;
 
@@ -145,6 +149,25 @@ namespace _2D_WorldGen.Scripts.Config
                 }
 
                 i++;
+            }
+
+            CreatePathfindingMaps();
+        }
+
+        private void CreatePathfindingMaps()
+        {
+            ObstacleMap = new NativeHashSet<int>(_tileDictionary.Count, Allocator.Persistent);
+            TileCostsMap = new NativeHashMap<int, float>(_tileDictionary.Count, Allocator.Persistent);
+            foreach (var tileEntry in _tileDictionary)
+            {
+                if (IsObstacle(tileEntry.Value.TilemapID) && tileEntry.Key != 0)
+                {
+                    ObstacleMap.Add(tileEntry.Key);
+                }
+                else if (Math.Abs(tileEntry.Value.TileCost - 1) > 0.01f)
+                {
+                    TileCostsMap.TryAdd(tileEntry.Key, tileEntry.Value.TileCost);
+                }
             }
         }
     }

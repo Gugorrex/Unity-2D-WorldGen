@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using _2D_WorldGen.Scripts.Manager.Addons;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -11,10 +12,18 @@ namespace _2D_WorldGen.Scripts.Manager.Core
         public List<ChunkLoader> chunkLoaders;
         private readonly List<int2> _loadedChunks = new();
         private TilemapManager _tilemapManager;
+        
+        // Pathfinding
+        private PathfindingManager _pathfindingManager;
 
         private void Awake()
         {
             _tilemapManager = GetComponent<TilemapManager>();
+
+            if (TryGetComponent<PathfindingManager>(out var pathfindingManager))
+            {
+                _pathfindingManager = pathfindingManager;
+            }
         }
 
         /// <summary>
@@ -41,6 +50,12 @@ namespace _2D_WorldGen.Scripts.Manager.Core
                 _tilemapManager.RemoveChunk(chunk);
                 _tilemapManager.RefreshChunk(chunk);
                 _loadedChunks.Remove(chunk);
+                
+                // Pathfinding
+                if (_pathfindingManager != null)
+                {
+                    _pathfindingManager.RemoveChunk(chunk);
+                }
             }
 
             // determine chunks to load by removing loaded chunks

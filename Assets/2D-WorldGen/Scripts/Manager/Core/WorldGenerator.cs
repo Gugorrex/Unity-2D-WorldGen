@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using _2D_WorldGen.Scripts.Config;
 using _2D_WorldGen.Scripts.GenerationTree;
+using _2D_WorldGen.Scripts.Manager.Addons;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace _2D_WorldGen.Scripts.Manager.Core
@@ -25,6 +27,9 @@ namespace _2D_WorldGen.Scripts.Manager.Core
         private ChunkLoaderManager _chunkLoaderManager;
 
         public int ChunkSize => chunkSize;
+        
+        // Addons
+        private PathfindingManager _pathfindingManager;
 
         [Serializable]
         public struct NodeConfigMatch
@@ -38,6 +43,12 @@ namespace _2D_WorldGen.Scripts.Manager.Core
         {
             _tilemapManager = GetComponent<TilemapManager>();
             _chunkLoaderManager = GetComponent<ChunkLoaderManager>();
+            
+            // Addons
+            if (TryGetComponent<PathfindingManager>(out var pathfindingManager))
+            {
+                _pathfindingManager = pathfindingManager;
+            }
         }
         
         private void Update()
@@ -92,16 +103,27 @@ namespace _2D_WorldGen.Scripts.Manager.Core
 
         private void ApplyChunk(GenerationCycleData cycleData, NodeConfigMatch config, NativeArray<int> biomes)
         {
+            var obstacles = new NativeHashSet<int2>(chunkSize * chunkSize, Allocator.TempJob);
+            var sparseTileCostsMap = new NativeHashMap<int2, float>(chunkSize * chunkSize, Allocator.TempJob);
             var job = new NoiseToTilesJob
             {
                 Noise = config.generationAlgorithm.GetResults(),
                 Chunk = new NativeArray<int>(cycleData.ArrayLength * cycleData.TilemapCount,
                     Allocator.TempJob),
-                TileSettingsArray = GetTileSettings(config.generatorConfig.HeightConfigs, out var indices),
+                TileSettingsArray = GetTileSettings(config.generatorConfig.HeightConfigs,
+                    out var indices),
                 Indices = indices,
                 Biomes = biomes, // default = 0 // TODO implement biomes or general ID based heightConfig selection
-                ChunkSize = chunkSize
+                ChunkSize = chunkSize,
+                
+                // Pathfinding
+                TileObstacleMap = _tilemapManager.TilemapConfig.ObstacleMap,
+                TileTileCostsMap = _tilemapManager.TilemapConfig.TileCostsMap,
+                Obstacles = obstacles.AsParallelWriter(),
+                SparseTileCostsMap = sparseTileCostsMap.AsParallelWriter(),
+                ChunkCoords = cycleData.ChunkCoords
             };
+            
             var jobHandle = job.ScheduleParallel(cycleData.ArrayLength, batchSize, default);
             job.TileSettingsArray.Dispose(jobHandle);
             job.Indices.Dispose(jobHandle);
@@ -109,6 +131,13 @@ namespace _2D_WorldGen.Scripts.Manager.Core
             _tilemapManager.RenderChunk(cycleData.ChunkCoords, job.Chunk);
             _tilemapManager.RefreshChunk(cycleData.ChunkCoords);
             job.Chunk.Dispose();
+
+            if (_pathfindingManager != null)
+            {
+                _pathfindingManager.AddChunk(obstacles, sparseTileCostsMap);
+                obstacles.Dispose();
+                sparseTileCostsMap.Dispose();
+            }
         }
 
         private void ApplyBiomes(NativeArray<int> biomes, NodeConfigMatch config)
@@ -168,9 +197,19 @@ namespace _2D_WorldGen.Scripts.Manager.Core
             // with correct tilemapID and ChunkSize this should not lead to a race condition
             // -> NativeDisableParallelForRestriction attribute for Chunk array
             [NativeDisableParallelForRestriction] public NativeArray<int> Chunk;
+            
+            // Pathfinding
+            [ReadOnly] public int2 ChunkCoords;
+            [ReadOnly] public NativeHashSet<int> TileObstacleMap;
+            [ReadOnly] public NativeHashMap<int, float> TileTileCostsMap;
+            public NativeHashSet<int2>.ParallelWriter Obstacles;
+            public NativeHashMap<int2, float>.ParallelWriter SparseTileCostsMap;
 
             public void Execute(int i)
             {
+                var x = i % ChunkSize;
+                var y = i / ChunkSize;
+                
                 var index = Indices[Biomes[i]];
                 
                 // Loop over configured tile settings
@@ -182,6 +221,18 @@ namespace _2D_WorldGen.Scripts.Manager.Core
                     if (TileSettingsArray[j].ID != 0) // ignore intended null / empty tiles (empty stringID / 0)
                     {
                         Chunk[TileSettingsArray[j].TilemapID * ChunkSize * ChunkSize + i] = TileSettingsArray[j].ID;
+                        
+                        // Pathfinding
+                        if (TileObstacleMap.Contains(TileSettingsArray[j].ID))
+                        {
+                            Obstacles.Add(new int2(ChunkCoords.x * ChunkSize + x, ChunkCoords.y * ChunkSize + y));
+                        } 
+                        else if (TileTileCostsMap.ContainsKey(TileSettingsArray[j].ID))
+                        {
+                            SparseTileCostsMap.TryAdd(
+                                new int2(ChunkCoords.x * ChunkSize + x, ChunkCoords.y * ChunkSize + y),
+                                TileTileCostsMap[TileSettingsArray[j].ID]);
+                        }
                     }
 
                     break;
