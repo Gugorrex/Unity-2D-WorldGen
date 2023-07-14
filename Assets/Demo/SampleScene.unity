@@ -215,15 +215,39 @@ Tilemap:
   m_Enabled: 1
   m_Tiles: {}
   m_AnimatedTiles: {}
-  m_TileAssetArray: []
-  m_TileSpriteArray: []
-  m_TileMatrixArray: []
-  m_TileColorArray: []
+  m_TileAssetArray:
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  m_TileSpriteArray:
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  m_TileMatrixArray:
+  - m_RefCount: 0
+    m_Data:
+      e00: 3.6375e-37
+      e01: 0
+      e02: 1.0285598e-38
+      e03: 1.0285598e-38
+      e10: 7.41e-43
+      e11: 0
+      e12: 7.37e-43
+      e13: 7.37e-43
+      e20: 1.2525748e+31
+      e21: -6.0590916e+11
+      e22: -7.0351256e-19
+      e23: -1.1521861e-19
+      e30: 4.5905e-41
+      e31: 7.4e-43
+      e32: 7.37e-43
+      e33: 7.4e-43
+  m_TileColorArray:
+  - m_RefCount: 0
+    m_Data: {r: 3.3993e-41, g: 3.3993e-41, b: 3.3993e-41, a: 3.3993e-41}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Origin: {x: 0, y: 0, z: 0}
-  m_Size: {x: 0, y: 0, z: 1}
+  m_Origin: {x: 0, y: -284, z: 0}
+  m_Size: {x: 609, y: 284, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
@@ -261,6 +285,8 @@ GameObject:
   - component: {fileID: 519420039}
   - component: {fileID: 519420038}
   - component: {fileID: 519420040}
+  - component: {fileID: 519420041}
+  - component: {fileID: 519420042}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -460,6 +486,37 @@ MonoBehaviour:
   moveSpeed: 150
   smoothTime: 0.5
   scrollSpeed: 5
+--- !u!114 &519420041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c2f102ed201413eb8eab95b9c60339a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileOverridesData: {fileID: 11400000, guid: e79ee04f61922dd47b0f4fad5bc420d2, type: 2}
+--- !u!114 &519420042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ffb5db3243541f787995f3f294256cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileID: 1
+  setOverride: 316
+  removeOverride: 317
+  tileOverridesManager: {fileID: 519420041}
+  grid: {fileID: 2140922555}
+  tilemapManager: {fileID: 519420037}
 --- !u!1 &1971851438
 GameObject:
   m_ObjectHideFlags: 0

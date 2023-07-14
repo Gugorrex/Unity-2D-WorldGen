@@ -8,7 +8,6 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace _2D_WorldGen.Scripts.Manager.Core
@@ -113,7 +112,7 @@ namespace _2D_WorldGen.Scripts.Manager.Core
                 TileSettingsArray = GetTileSettings(config.generatorConfig.HeightConfigs,
                     out var indices),
                 Indices = indices,
-                Biomes = biomes, // default = 0 // TODO implement biomes or general ID based heightConfig selection
+                Biomes = biomes,
                 ChunkSize = chunkSize,
                 
                 // Pathfinding

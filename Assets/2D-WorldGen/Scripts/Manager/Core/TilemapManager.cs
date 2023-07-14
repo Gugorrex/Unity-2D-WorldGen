@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using _2D_WorldGen.Scripts.Config;
+using _2D_WorldGen.Scripts.Manager.Addons;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
@@ -29,11 +30,18 @@ namespace _2D_WorldGen.Scripts.Manager.Core
             tilemap => tilemap.tilemap);
 
         public TilemapConfig TilemapConfig => tilemapConfig;
+        
+        private TileOverridesManager _tileOverridesManager;
 
         private void Awake()
         {
             _worldGenerator = GetComponent<WorldGenerator>();
             tilemapConfig.CreateDictionaries();
+            
+            if (TryGetComponent<TileOverridesManager>(out var tileOverridesManager))
+            {
+                _tileOverridesManager = tileOverridesManager;
+            }
         }
 
         public void RenderChunk(int2 chunkCoords, NativeArray<int> chunk)
@@ -62,7 +70,21 @@ namespace _2D_WorldGen.Scripts.Manager.Core
                         var prevTile = tilemap.Value.GetTile(new Vector3Int(chunkCoords.x * chunkSize + x, 
                             chunkCoords.y * chunkSize + y));
                         var prevID = prevTile != null ? tilemapConfig.GetTileID(prevTile) : 0;
-                        tilesArray[y * chunkSize + x] = prevID == 0 ? tilemapConfig.GetTile(tileID) : prevTile;
+
+                        var tile = tilemapConfig.GetTile(tileID);
+                        
+                        // Addons
+                        if (_tileOverridesManager != null)
+                        {
+                            var overrideKey = new int3(chunkCoords.x * chunkSize + x, 
+                                chunkCoords.y * chunkSize + y, tilemap.Key);
+                            tile = _tileOverridesManager.tileOverridesData.TileOverrides.ContainsKey(overrideKey)
+                                ? tilemapConfig.GetTile(_tileOverridesManager.tileOverridesData.TileOverrides[overrideKey]) 
+                                : tile;
+                        }
+                        
+                            
+                        tilesArray[y * chunkSize + x] = prevID == 0 ? tile : prevTile; // prevent overrides from new generation cycles
                     }
                 }
             
@@ -108,37 +130,22 @@ namespace _2D_WorldGen.Scripts.Manager.Core
             }
         }
 
-        /* migrated from old project worldGenV2 (private) */
-        /* TODO find out if we want to use chunk as input or directly use worldCoords -> where do we need these methods?
-        public void RenderTile(int2 worldCoords, int chunkSize)
+        public void RenderTile(int2 worldCoords, int tilemapID, int tileID)
         {
-            var normalChunkCoords = GridCoordsConverter.WorldToSubGridCoords(chunkSize, worldCoords, out var localCoords);
-            var chunk = _chunkManager.GetChunk(normalChunkCoords);
-            var yOffset = chunkSize;
-            var zOffset = yOffset * yOffset;
-            foreach (var tilemap in _tilemaps)
-            {
-                var tileID = chunk[tilemap.Key * zOffset + localCoords.y * yOffset + localCoords.x];
-                var tile = _tilemapConfig.GetTile(tileID);
-                tilemap.Value.SetTile(new Vector3Int(worldCoords.x, worldCoords.y, 0), tile);
-            }
+            var tilemap = Tilemaps[tilemapID];
+            tilemap.SetTile(new Vector3Int(worldCoords.x, worldCoords.y, 0), tilemapConfig.GetTile(tileID));
         }
 
-        public void RefreshTile(int2 worldCoords)
+        public void RefreshTile(int2 worldCoords, int tilemapID)
         {
-            foreach (var tilemap in _tilemaps.Values)
-            {
-                tilemap.RefreshTile(new Vector3Int(worldCoords.x, worldCoords.y, 0));
-            }
+            var tilemap = Tilemaps[tilemapID];
+            tilemap.RefreshTile(new Vector3Int(worldCoords.x, worldCoords.y, 0));
         }
 
-        public void RemoveTile(int2 worldCoords)
+        public void RemoveTile(int2 worldCoords, int tilemapID)
         {
-            foreach (var tilemap in _tilemaps.Values)
-            {
-                tilemap.SetTile(new Vector3Int(worldCoords.x, worldCoords.y, 0), null);
-            }
+            var tilemap = Tilemaps[tilemapID];
+            tilemap.SetTile(new Vector3Int(worldCoords.x, worldCoords.y, 0), null);
         }
-        */
     }
 }
