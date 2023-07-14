@@ -135,9 +135,10 @@ namespace _2D_WorldGen.Scripts.Manager.Core
             if (_pathfindingManager != null)
             {
                 _pathfindingManager.AddChunk(obstacles, sparseTileCostsMap);
-                obstacles.Dispose();
-                sparseTileCostsMap.Dispose();
             }
+            
+            obstacles.Dispose();
+            sparseTileCostsMap.Dispose();
         }
 
         private void ApplyBiomes(NativeArray<int> biomes, NodeConfigMatch config)

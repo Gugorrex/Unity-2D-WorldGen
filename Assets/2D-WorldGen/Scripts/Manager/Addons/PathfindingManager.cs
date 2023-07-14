@@ -120,11 +120,6 @@ namespace _2D_WorldGen.Scripts.Manager.Addons
             return job;
         }
 
-        private void OnDisable()
-        {
-            Dispose();
-        }
-
         private void OnApplicationQuit()
         {
             Dispose();
