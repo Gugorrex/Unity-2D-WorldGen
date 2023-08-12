@@ -32,6 +32,11 @@ namespace _2D_WorldGen.Scripts.Manager.Addons
 
         public void RemoveTileOverride(int2 worldCoords, int tilemapID)
         {
+            if (!tileOverridesData.TileOverrides.ContainsKey(new int3(worldCoords.x, worldCoords.y, tilemapID)))
+            {
+                return;
+            }
+            
             // Apply Change directly
             _tilemapManager.RemoveTile(worldCoords, tilemapID);
             // TODO generate single tile with world generator and call RenderTile afterwards
