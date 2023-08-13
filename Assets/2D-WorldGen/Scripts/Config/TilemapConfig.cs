@@ -61,7 +61,7 @@ namespace _2D_WorldGen.Scripts.Config
 
         public int GetTileID(TileBase tileBase)
         {
-            return _tileBaseIdMapping[tileBase];
+            return tileBase != null ? _tileBaseIdMapping[tileBase] : 0;
         }
 
         public int GetTileTilemapID(int tileID)

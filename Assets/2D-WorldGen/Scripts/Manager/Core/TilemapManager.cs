@@ -79,7 +79,7 @@ namespace _2D_WorldGen.Scripts.Manager.Core
                             var overrideKey = new int3(chunkCoords.x * chunkSize + x, 
                                 chunkCoords.y * chunkSize + y, tilemap.Key);
                             tile = _tileOverridesManager.tileOverridesData.TileOverrides.ContainsKey(overrideKey)
-                                ? tilemapConfig.GetTile(_tileOverridesManager.tileOverridesData.TileOverrides[overrideKey]) 
+                                ? tilemapConfig.GetTile(_tileOverridesManager.tileOverridesData.TileOverrides[overrideKey].x) 
                                 : tile;
                         }
                         
@@ -146,6 +146,12 @@ namespace _2D_WorldGen.Scripts.Manager.Core
         {
             var tilemap = Tilemaps[tilemapID];
             tilemap.SetTile(new Vector3Int(worldCoords.x, worldCoords.y, 0), null);
+        }
+
+        public int GetTileID(int2 worldCoords, int tilemapID)
+        {
+            var tilemap = Tilemaps[tilemapID];
+            return tilemapConfig.GetTileID(tilemap.GetTile(new Vector3Int(worldCoords.x, worldCoords.y, 0)));
         }
     }
 }
