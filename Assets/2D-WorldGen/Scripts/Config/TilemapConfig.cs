@@ -170,5 +170,12 @@ namespace _2D_WorldGen.Scripts.Config
                 }
             }
         }
+
+        ~TilemapConfig()
+        {
+            ObstacleMap.Dispose();
+            TileCostsMap.Dispose();
+        }
+        
     }
 }
